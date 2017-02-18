@@ -23,6 +23,11 @@ app.get('/', (req, res) => {
     res.send('hello express');
 });
 
+app.get('/node', (req, res) => {
+
+    res.send('node express');
+});
+
 // 启动服务器
 
 app.listen(3000);
