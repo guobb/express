@@ -4,6 +4,7 @@
   "description": "express",
   "main": "express.js",
   "dependencies": {
+    "ejs": "^2.5.6",
     "express": "^4.14.1"
   },
   "devDependencies": {},
