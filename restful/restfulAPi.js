@@ -84,7 +84,75 @@ app.post('/users', (req, res) => {
         res.send(addedUser);
 
     } else {
-        res.send({mse:'添加失败'});
+        res.send({mse: '添加失败'});
     }
 });
+
+// 整体更新全部方法
+// curl -X PUT --data 'id=2&name=java' http://localhost:8080/users/2
+app.put('/users/:id', (req, res) => {
+
+    let putUser = req.body;
+    if (putUser) {
+
+        for (let i = 0; i < users.length; i++) {
+            // 判断当前用户和用户传进要更新的用户ID是否一致
+            if (users[i].id == req.params.id) {
+                users[i] = putUser; // 把酒德对象整体替换成新的对象
+                break;
+            }
+        }
+        res.send(putUser);
+    } else {
+        res.send({msg: '更新信息失败'})
+    }
+
+});
+
+// 局部更新 请求体里只传入要更新的字段
+// curl -X PATCH --data 'name=java10' http://localhost:8080/users/2
+app.patch('/users/:id', (req, res) => {
+
+    let updateFields = req.body;
+
+    if (updateFields) {
+        for (let i = 0; i < users.length; i++) {
+            // 判断当前用户和用户传进要更新的用户ID是否一致
+            if (users[i].id == req.params.id) {
+                for (let attr in updateFields) {
+                    // 用新的值替换旧的值
+                    if (updateFields.hasOwnProperty(attr)) {
+                        users[i][attr] = updateFields[attr];
+
+                    }
+                }
+                res.send(users[i]);
+                break;
+            }
+        }
+    } else {
+        res.send({msg: '更新信息失败'})
+    }
+});
+
+// 删除
+// curl -X DELETE  http://localhost:8080/users/2
+app.delete('/users/:id', (req, res) => {
+
+    /* for (let i = 0; i < users.length; i++) {
+     if (users[i].id == req.params.id) {
+     users.splice(i, 1);
+     res.send({});
+     return;
+     }
+     }*/
+
+    users = users.filter((user) => {
+        return user.id != req.params.id;
+    });
+    res.send({msg: '删除失败'});
+
+});
+
+
 app.listen(8080);
